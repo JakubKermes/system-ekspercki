@@ -9,34 +9,81 @@ class CarsController extends Controller
 {
     public function getPoints($budget, $handling, $speed, $comfort, $looks)
     {
-        $cars = Car::select('Make', 'model', 'Year', 'price', 'Handling', 'Speed', 'Comfort', 'Looks')->get();
+        $cars = Car::select('Make', 'model', 'Year', 'price', 'Handling', 'Speed', 'Comfort', 'Looks')->get()->toArray();
+
+        // Create an array of objects
+        $carObjects = [];
+
         foreach ($cars as $car) {
-            $car->points = 0;
+            // Convert each car to an object
+            $carObject = (object) $car;
 
-            $car->points += $car->handling - $handling;
-            $car->points += $car->speed - $speed;
-            $car->points += $car->comfort - $comfort;
-            $car->points += $car->looks - $looks;
+            $carObject->points = 0;
 
-            $car->points = $car->price > $budget ? 0 : $car->points;
+            if ($carObject->Handling - $handling > 0) {
+                $carObject->points += $carObject->Handling - $handling;
+            } else {
+                $carObject->points += 0; // Avoid subtracting if it would be negative
+            }
 
-            $cars->requirements_met = 0;
-            if ($car->handling >= $handling) {
-                $cars->requirements_met++;
+            if ($carObject->Speed - $speed > 0) {
+                $carObject->points += $carObject->Speed - $speed;
+            } else {
+                $carObject->points += 0; // Avoid subtracting if it would be negative
             }
-            if ($car->speed >= $speed) {
-                $cars->requirements_met++;
+
+            if ($carObject->Comfort - $comfort > 0) {
+                $carObject->points += $carObject->Comfort - $comfort;
+            } else {
+                $carObject->points += 0; // Avoid subtracting if it would be negative
             }
-            if ($car->comfort >= $comfort) {
-                $cars->requirements_met++;
+
+            if ($carObject->Looks - $looks > 0) {
+                $carObject->points += $carObject->Looks - $looks;
+            } else {
+                $carObject->points += 0; // Avoid subtracting if it would be negative
             }
-            if ($car->looks >= $looks) {
-                $cars->requirements_met++;
+
+
+            $carObject->points = $carObject->price > $budget ? 0 : $carObject->points;
+
+            $carObject->requirements_met = 0;
+            if ($carObject->Handling >= $handling) {
+                $carObject->requirements_met++;
             }
+            if ($carObject->Speed >= $speed) {
+                $carObject->requirements_met++;
+            }
+            if ($carObject->Comfort >= $comfort) {
+                $carObject->requirements_met++;
+            }
+            if ($carObject->Looks >= $looks) {
+                $carObject->requirements_met++;
+            }
+            if($carObject->price >= $budget) {
+                $carObject->requirements_met = 0;
+            }
+
+            // Add the car object to the array of car objects
+            $carObjects[] = $carObject;
         }
 
-        $topCars = array_orderby($cars, 'requirements_met', SORT_DESC, 'points', SORT_DESC)->take(3);
+        usort($carObjects, function ($a, $b) {
+            // First, compare based on the number of requirements met (descending order).
+            $requirementsComparison = $b->requirements_met - $a->requirements_met;
+
+            // If the number of requirements met is the same, compare based on points (descending order).
+            if ($requirementsComparison === 0) {
+                return $b->points - $a->points;
+            }
+
+            return $requirementsComparison;
+        });
+
+        // Take the top 3 cars from the sorted array.
+        $topCars = array_slice($carObjects, 0, 3);
 
         return response()->json($topCars, 200, [], JSON_UNESCAPED_UNICODE);
     }
+
 }

@@ -16,8 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/points/{budget}/{handling}/{speed}/{comfort}/{looks}', function ($budget, $handling, $speed, $comfort, $looks) {
 
-});
+Route::get('/points/{budget}/{handling}/{speed}/{comfort}/{looks}', [App\Http\Controllers\CarsController::class, 'getPoints']);
+
+
 
 
