@@ -83,6 +83,8 @@ class CarsController extends Controller
         // Take the top 3 cars from the sorted array.
         $topCars = array_slice($carObjects, 0, 3);
 
+
+
         return response()->json($topCars, 200, [], JSON_UNESCAPED_UNICODE);
     }
 

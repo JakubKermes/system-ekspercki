@@ -15,12 +15,8 @@ import { createApp } from 'vue';
 
 const app = createApp({});
 
-import QuizComponent from "./components/QuizComponent.vue";
-import CarProposalsComponent from "./components/CarProposalsComponent.vue";
-
-app.component('quiz', QuizComponent);
-app.component('car-proposals', CarProposalsComponent);
-
+import ExampleComponent from './components/ExampleComponent.vue';
+app.component('example-component', ExampleComponent);
 
 /**
  * The following block of code may be used to automatically register your
@@ -30,9 +26,9 @@ app.component('car-proposals', CarProposalsComponent);
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
 
-Object.entries(import.meta.glob('./**/*.vue', { eager: true })).forEach(([path, definition]) => {
-    app.component(path.split('/').pop().replace(/\.\w+$/, ''), definition.default);
-});
+// Object.entries(import.meta.glob('./**/*.vue', { eager: true })).forEach(([path, definition]) => {
+//     app.component(path.split('/').pop().replace(/\.\w+$/, ''), definition.default);
+// });
 
 /**
  * Finally, we will attach the application instance to a HTML element with
