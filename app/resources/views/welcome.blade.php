@@ -55,9 +55,10 @@
                         <input v-model="looks" type="range" min="1" max="15" />
 
                         <br>
-                        <button @click="getCarProposals" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <button @click="getCarProposals" style="background-color: #364872; color: white; font-weight: bold; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">
                             Znajdź propozycje
                         </button>
+
                         <div v-for="(car, index) in carProposals" :key="index" class="my-4 border p-4">
                             <p><strong>Marka:</strong><span v-html="generateText(car.Make)"></span> </p>
                             <p><strong>Model:</strong><span v-html="generateText(car.model)"></span> </p>
