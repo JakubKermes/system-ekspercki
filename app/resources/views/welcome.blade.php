@@ -11,6 +11,9 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="{{ asset('js/app.js') }}"></script>
         -->
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
@@ -31,7 +34,7 @@
                 </div>
                 <div class="mt-16 dark:text-white dark:bg-gray-900">
                     <!-- content -->
-                    <div>
+                    <div id="app">
                         <h1>Jaki masz budżet?</h1>
                         <input v-model="budget" type="number" placeholder="Podaj budżet" />
 
@@ -51,20 +54,33 @@
                          <h1 id="data"></h1>
 
                         <script>
-                            // URL of the JSON data
-                            const url = '/points/10000/10/5/3/6';
+                            new Vue({
+                                el: '#app',
+                                data: {
+                                    budget: 10000, // Domyślne wartości
+                                    handling: 10,
+                                    speed: 5,
+                                    comfort: 3,
+                                    looks: 6,
+                                },
+                                methods: {
+                                    getCarProposals() {
+                                        const url = `/points/${this.budget}/${this.handling}/${this.speed}/${this.comfort}/${this.looks}`;
 
-                            // Fetch the JSON data from the URL
-                            fetch(url)
-                                .then(response => response.json())
-                                .then(data => {
-                                    // Update the content of the <h1> element with the JSON data
-                                    const h1Element = document.getElementById('data');
-                                    h1Element.textContent = JSON.stringify(data);
-                                })
-                                .catch(error => {
-                                    console.error('Error fetching JSON data:', error);
-                                });
+                                        // Fetch the JSON data from the updated URL
+                                        fetch(url)
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                // Update the content of the <h1> element with the JSON data
+                                                const h1Element = document.getElementById('data');
+                                                h1Element.textContent = JSON.stringify(data);
+                                            })
+                                            .catch(error => {
+                                                console.error('Error fetching JSON data:', error);
+                                            });
+                                    }
+                                }
+                            });
                         </script>
 
                     </div>
