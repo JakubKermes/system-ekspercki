@@ -36,21 +36,39 @@
                     <!-- content -->
                     <div id="app">
                         <h1>Jaki masz budżet?</h1>
-                        <input v-model="budget" type="number" placeholder="Podaj budżet" />
+                        <input class="dark:text-black" v-model="budget" type="number" placeholder="Podaj budżet" style="color: inherit; background-color: inherit; appearance: textfield;" />
 
+                        <br>
                         <h1>Jak bardzo cenisz prowadzenie samochodu?</h1>
                         <input v-model="handling" type="range" min="1" max="15" />
 
+                        <br>
                         <h1>Jak bardzo szybkie auto potrzebujesz?</h1>
                         <input v-model="speed" type="range" min="1" max="15" />
 
+                        <br>
                         <h1>Jak bardzo zależy Ci na komforcie?</h1>
                         <input v-model="comfort" type="range" min="1" max="15" />
 
+                        <br>
                         <h1>Jak bardzo zależy Ci na wyglądzie?</h1>
                         <input v-model="looks" type="range" min="1" max="15" />
 
-                        <button @click="getCarProposals">Znajdź propozycje</button>
+                        <br>
+                        <button @click="getCarProposals" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Znajdź propozycje
+                        </button>
+                        <div v-for="(car, index) in carProposals" :key="index" class="my-4 border p-4">
+                            <p><strong>Marka:</strong><span v-html="generateText(car.Make)"></span> </p>
+                            <p><strong>Model:</strong><span v-html="generateText(car.model)"></span> </p>
+                            <p><strong>Rocznik:</strong><span v-html="generateText(car.Year)"></span> </p>
+                            <p><strong>Cena:</strong><span v-html="generateText(car.price)"></span> </p>
+                            <p><strong>Prowadzenie:</strong> <span v-html="generateRating(car.Handling)"></span></p>
+                            <p><strong>Prędkość:</strong> <span v-html="generateRating(car.Speed)"></span></p>
+                            <p><strong>Komfort:</strong> <span v-html="generateRating(car.Comfort)"></span></p>
+                            <p><strong>Wygląd:</strong> <span v-html="generateRating(car.Looks)"></span></p>
+                        </div>
+                        <br>
                          <h1 id="data"></h1>
 
                         <script>
@@ -62,23 +80,31 @@
                                     speed: 5,
                                     comfort: 3,
                                     looks: 6,
+                                    carProposals: [],
                                 },
                                 methods: {
                                     getCarProposals() {
                                         const url = `/points/${this.budget}/${this.handling}/${this.speed}/${this.comfort}/${this.looks}`;
 
-                                        // Fetch the JSON data from the updated URL
                                         fetch(url)
                                             .then(response => response.json())
                                             .then(data => {
-                                                // Update the content of the <h1> element with the JSON data
-                                                const h1Element = document.getElementById('data');
-                                                h1Element.textContent = JSON.stringify(data);
+                                                this.carProposals = data; // Zapisz dane do carProposals
                                             })
                                             .catch(error => {
                                                 console.error('Error fetching JSON data:', error);
                                             });
-                                    }
+                                    },
+                                    generateRating(value) {
+                                        let rating = '';
+                                        for (let i = 1; i <= 15; i++) {
+                                            rating += i <= value ? '■' : '□';
+                                        }
+                                        return rating;
+                                    },
+                                    generateText(value) {
+                                        return value.toString();
+                                    },
                                 }
                             });
                         </script>
