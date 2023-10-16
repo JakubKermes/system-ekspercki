@@ -60,14 +60,15 @@
                         </button>
 
                         <div v-for="(car, index) in carProposals" :key="index" class="my-4 border p-4">
+                            <br>
                             <p><strong>Marka:</strong><span v-html="generateText(car.Make)"></span> </p>
                             <p><strong>Model:</strong><span v-html="generateText(car.model)"></span> </p>
                             <p><strong>Rocznik:</strong><span v-html="generateText(car.Year)"></span> </p>
                             <p><strong>Cena:</strong><span v-html="generateText(car.price)"></span> </p>
-                            <p><strong>Prowadzenie:</strong> <span v-html="generateRating(car.Handling)"></span></p>
-                            <p><strong>Prędkość:</strong> <span v-html="generateRating(car.Speed)"></span></p>
-                            <p><strong>Komfort:</strong> <span v-html="generateRating(car.Comfort)"></span></p>
-                            <p><strong>Wygląd:</strong> <span v-html="generateRating(car.Looks)"></span></p>
+                            <p><strong>Prowadzenie:</strong> <div class="inline absolute right-0" v-html="generateRating(car.Handling)"></div>
+                            <p><strong>Prędkość:</strong> <div class="inline absolute right-0" v-html="generateRating(car.Speed)"></div>
+                            <p><strong>Komfort:</strong> <div class="inline absolute right-0" v-html="generateRating(car.Comfort)"></div>
+                            <p><strong>Wygląd:</strong> <div class="inline absolute right-0" v-html="generateRating(car.Looks)"></div>
                         </div>
                         <br>
                          <h1 id="data"></h1>
